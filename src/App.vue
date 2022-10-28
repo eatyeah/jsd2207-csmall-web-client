@@ -1,10 +1,5 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">主页</router-link> |
-      <router-link to="/about">关于我们</router-link> |
-      <router-link to="/other">其他</router-link>
-    </nav>
     <router-view/>
   </div>
 </template>

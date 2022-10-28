@@ -15,9 +15,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
-    path: '/other',
+    path: '/login',
     // 函数式导入，需要懒加载，因为不一定会访问，所以需要等待
-    component: () => import(/* webpackChunkName: "about" */ '../views/OtherView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/LoginView.vue')
   }
 ]
 
@@ -26,5 +26,4 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-
 export default router
