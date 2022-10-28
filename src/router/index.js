@@ -1,22 +1,23 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView from '../views/HomeView.vue' // 静态导入，不需要懒加载，因为项目开始运行就要加载，不需要等待
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'home',
     component: HomeView
   },
   {
     path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    // 函数式导入，需要懒加载，因为不一定会访问，所以需要等待
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  },
+  {
+    path: '/other',
+    // 函数式导入，需要懒加载，因为不一定会访问，所以需要等待
+    component: () => import(/* webpackChunkName: "about" */ '../views/OtherView.vue')
   }
 ]
 
