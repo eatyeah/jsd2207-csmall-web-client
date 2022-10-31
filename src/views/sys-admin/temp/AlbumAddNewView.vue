@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -58,7 +60,9 @@ export default {
       // 检查表单是否通过验证
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          let url = 'http://localhost:9080/albums/add-new';
+          console.log('url: ' + url);
+          this.axios.post(url, this.ruleForm);
         } else {
           console.log('error submit!!');
           return false;
