@@ -8,7 +8,13 @@ const routes = [
     {
         path: '/',
         component: HomeView,
+        redirect: '/sys-admin',
         children: [
+            {
+                path: '/sys-admin', // http://localhost:9000/sys-admin
+                component: () => import('../views/sys-admin/SystemAdminIndex.vue')
+            },
+
             {
                 path: '/sys-admin/temp/admin/add-new',
                 component: () => import('../views/sys-admin/temp/AdminAddNewView.vue')
@@ -59,12 +65,11 @@ const routes = [
             },
         ]
     },
-
     {
         path: '/login',
         // 函数式导入，需要懒加载，因为不一定会访问，所以需要等待
         component: () => import(/* webpackChunkName: "about" */ '../views/LoginView.vue')
-    }
+    },
 ]
 
 const router = new VueRouter({
