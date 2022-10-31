@@ -1,7 +1,7 @@
 <!--管理员登录-->
 <template>
   <div style="background-color: white; width: 800px; margin: 100px auto; padding: 50px; border-radius: 10px">
-    <h1>管理员登录</h1>
+    <h1 style="text-align: center; margin: 0 0 30px 0">管理员登录</h1>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="用户名" prop="username">
         <el-input v-model="ruleForm.username"></el-input>
