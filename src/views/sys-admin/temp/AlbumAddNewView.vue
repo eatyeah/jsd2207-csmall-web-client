@@ -68,6 +68,10 @@ export default {
             console.log('responseBody= ');
             console.log(responseBody);
             if (responseBody.state == 1) {
+              this.$message({
+                message: responseBody.message,
+                type: 'success'
+              });
               //  清空表单
               this.resetForm(formName);
             } else {
