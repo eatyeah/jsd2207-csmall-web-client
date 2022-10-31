@@ -137,7 +137,7 @@
 
         <!-- 下半部分的右侧主体部分 -->
         <el-main class="layout-main">
-
+          <router-view/>
         </el-main>
 
       </el-container>
