@@ -174,7 +174,17 @@
 }
 
 .layout-aside {
+  /*background: #222C32;*/
+  background: #545C64;
+}
 
+.el-menu-item.is-active {
+  /*important，当你的样式被覆盖时，可以使用important来提高优先级*/
+  background: #2D3C4D !important;
+}
+
+.layout-aside i{
+  color: #fff !important;
 }
 
 .el-menu-vertical-demo {
