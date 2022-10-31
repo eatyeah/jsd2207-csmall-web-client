@@ -62,7 +62,18 @@ export default {
         if (valid) {
           let url = 'http://localhost:9080/albums/add-new';
           console.log('url: ' + url);
-          this.axios.post(url, this.ruleForm);
+          let formDate = this.qs.stringify(this.ruleForm);
+          this.axios.post(url, formDate).then((response) => {
+            let responseBody = response.data;
+            console.log('responseBody= ');
+            console.log(responseBody);
+            if (responseBody.state == 1) {
+              //  清空表单
+              this.resetForm(formName);
+            } else {
+              this.$message.error(responseBody.message);
+            }
+          });
         } else {
           console.log('error submit!!');
           return false;
