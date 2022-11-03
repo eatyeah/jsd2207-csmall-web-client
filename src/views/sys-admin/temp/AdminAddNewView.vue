@@ -78,11 +78,11 @@ export default {
       rules: {
         username: [
           {required: true, message: '请输入用户名', trigger: 'blur'},
-          {min: 4, max: 15, message: '长度在 4 到 25 个字符', trigger: 'blur'}
+          {min: 4, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur'}
         ],
         password: [
           {required: true, message: '请输入密码', trigger: 'blur'},
-          {min: 4, max: 15, message: '长度在 4 到 15 个字符', trigger: 'blur'}
+          {min: 4, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur'}
         ],
         nickname: [
           {required: true, message: '请输入昵称', trigger: 'blur'},
@@ -94,28 +94,18 @@ export default {
         ],
         email: [
           {required: true, message: '请输入电子邮箱', trigger: 'blur'},
-          {min: 8, max: 35, message: '长度在 8 到 35 个字符', trigger: 'blur'}
+          {min: 4, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur'}
         ],
         enable: [
           {required: true, message: '', trigger: 'change'}
         ],
-        roleIds: [
-          {type: 'array', required: true, message: '请选择角色', trigger: 'blur'}
-        ]
+        // roleIds: [
+        //   {type: 'array', required: true, message: '请选择角色', trigger: 'blur'}
+        // ]
       }
     };
   },
   methods: {
-    loadRoleList() {
-      let url = 'http://localhost:9081/roles';
-      console.log('url = ' + url);
-      this.axios
-          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
-          .get(url).then((response) => {
-        let responseBody = response.data;
-        this.roleList = responseBody.data;
-      });
-    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -123,9 +113,7 @@ export default {
           console.log('url = ' + url);
           let formData = this.qs.stringify(this.ruleForm);
           console.log('formData：' + formData);
-          this.axios
-              .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
-              .post(url, formData).then((response)=> {
+          this.axios.post(url, formData).then((response)=> {
             let responseBody = response.data;
             if (responseBody.state == 20000) {
               this.$message({
@@ -146,9 +134,6 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
-  },
-  mounted() {
-    this.loadRoleList();
   }
 }
 </script>
