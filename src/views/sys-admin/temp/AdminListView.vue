@@ -31,8 +31,10 @@
       <el-table-column label="操作" align="center" width="100">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" size="mini" circle
+                     :disabled="scope.row.id == 1"
                      @click="handleEdit(scope.row)"></el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" circle
+                     :disabled="scope.row.id == 1"
                      @click="openDeleteConfirm(scope.row)"></el-button>
         </template>
       </el-table-column>
@@ -48,6 +50,38 @@ export default {
     }
   },
   methods: {
+    // 是否启用管理员
+    changeEnable(admin) {
+      let enableText = ['禁用', '启用'];
+      let url = 'http://localhost:9081/admins/' + admin.id;
+      if (admin.enable == 1) {
+        url += '/enable';
+      } else {
+        url += '/disable';
+      }
+      console.log('url = ' + url);
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .post(url).then((response) => {
+        let responseBody = response.data;
+        console.log(responseBody);
+        if (responseBody.state == 20000) {
+          this.$message({
+            message: '将【' + admin.username + '】的启用状态设置为【' + enableText[admin.enable] + '】成功',
+            type: 'success'
+          });
+        } else {
+          // this.$message.error(responseBody.message);
+          let title = '操作失败';
+          this.$alert(responseBody.message, title, {
+            confirmButtonText: '确定',
+            callback: action => {
+              this.loadAdminList();
+            }
+          });
+        }
+      });
+    },
     // 编辑管理员
     handleEdit(admin) {
       let title = '提示';
