@@ -48,6 +48,7 @@ export default {
     }
   },
   methods: {
+    // 编辑管理员
     handleEdit(admin) {
       let title = '提示';
       let message = '您正在尝试编辑【' + admin.id + '-' + admin.username + '】的管理员详情，抱歉，此功能尚未实现……';
@@ -55,6 +56,7 @@ export default {
         confirmButtonText: '确定'
       });
     },
+    // 点击删除按钮
     openDeleteConfirm(admin) {
       let title = '提示';
       let message = '此操作将永久删除【' + admin.username + '】管理员，是否继续？';
@@ -64,9 +66,14 @@ export default {
         type: 'warning'
       }).then(() => {
         this.handleDelete(admin);
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
       }).catch(() => {
       });
     },
+    // 删除管理员
     handleDelete(admin) {
       console.log('handleDelete ... id=' + admin.id);
       let url = 'http://localhost:9081/admins/' + admin.id + '/delete';
@@ -77,12 +84,15 @@ export default {
         if (responseBody.state != 20000) {
           this.$message.error(responseBody.message);
         }
-        this.loadAdminList();
+        if (responseBody.state == 20000 || responseBody.state == 40400) {
+          this.loadAdminList();
+        }
       });
     },
+    // 加载管理员列表
     loadAdminList() {
       console.log('loadAdminList ...');
-      let url = 'http://localhost:9081/admins/list';
+      let url = 'http://localhost:9081/admins';
       console.log('url = ' + url);
       this.axios.get(url).then((response) => {
         let responseBody = response.data;
