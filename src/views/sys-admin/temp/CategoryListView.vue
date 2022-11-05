@@ -87,9 +87,7 @@ export default {
         url += '/disable';
       }
       console.log('url = ' + url);
-      this.axios
-          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
-          .post(url).then((response) => {
+      this.axios.post(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state == 20000) {
           this.$message({
@@ -110,9 +108,7 @@ export default {
         url += '/hidden';
       }
       console.log('url = ' + url);
-      this.axios
-          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
-          .post(url).then((response) => {
+      this.axios.post(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state == 20000) {
           this.$message({
@@ -147,9 +143,7 @@ export default {
     handleDelete(category) {
       let url = 'http://localhost:9080/categories/' + category.id + '/delete';
       console.log('url = ' + url);
-      this.axios
-          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
-          .post(url).then((response) => {
+      this.axios.post(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state != 20000) {
           this.$message.error(responseBody.message);
@@ -161,9 +155,7 @@ export default {
       let url = 'http://localhost:9080/categories/list-by-parent?parentId='
           + this.parentCategoryId;
       console.log('url = ' + url);
-      this.axios
-          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
-          .get(url).then((response) => {
+      this.axios.get(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state == 20000) {
           this.tableData = responseBody.data;
