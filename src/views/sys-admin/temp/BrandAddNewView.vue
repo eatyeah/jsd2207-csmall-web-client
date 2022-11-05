@@ -86,13 +86,11 @@ export default {
           let formData = this.qs.stringify(this.ruleForm);
           console.log('formData = ' + formData);
 
-          this.axios
-              .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
-              .post(url, formData).then((response) => {
+          this.axios.post(url, formData).then((response) => {
             let responseBody = response.data;
             if (responseBody.state == 20000) {
               this.$message({
-                message: '添加成功！',
+                message: '添加品牌成功！',
                 type: 'success'
               });
               this.resetForm(formName);

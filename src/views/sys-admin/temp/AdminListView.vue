@@ -60,25 +60,19 @@ export default {
         url += '/disable';
       }
       console.log('url = ' + url);
-      this.axios
-          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
-          .post(url).then((response) => {
+      this.axios.post(url).then((response) => {
         let responseBody = response.data;
-        console.log(responseBody);
         if (responseBody.state == 20000) {
+          let message = '将管理员【' + admin.username + '】的启用状态改为【' + enableText[admin.enable] + '】成功！';
           this.$message({
-            message: '将【' + admin.username + '】的启用状态设置为【' + enableText[admin.enable] + '】成功',
+            message: message,
             type: 'success'
           });
         } else {
-          // this.$message.error(responseBody.message);
-          let title = '操作失败';
-          this.$alert(responseBody.message, title, {
-            confirmButtonText: '确定',
-            callback: action => {
-              this.loadAdminList();
-            }
-          });
+          this.$message.error(responseBody.message);
+        }
+        if (responseBody.state == 40400) {
+          this.loadAdminList();
         }
       });
     },

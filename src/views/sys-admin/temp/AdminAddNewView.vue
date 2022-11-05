@@ -99,19 +99,30 @@ export default {
         enable: [
           {required: true, message: '', trigger: 'change'}
         ],
-        // roleIds: [
-        //   {type: 'array', required: true, message: '请选择角色', trigger: 'blur'}
-        // ]
+        roleIds: [
+          {type: 'array', required: true, message: '请选择角色', trigger: 'blur'}
+        ]
       }
     };
   },
   methods: {
+    // 获取角色列表
+    loadRoleList() {
+      console.log('loadRoleList');
+      let url = 'http://localhost:9081/roles';
+      console.log('url = ' + url);
+      this.axios.get(url).then((response) => {
+        let responseBody = response.data;
+        this.roleList = responseBody.data;
+      });
+    },
+    // 提交表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let url = 'http://localhost:9081/admins/add-new';
           console.log('url = ' + url);
-          let formData = this.qs.stringify(this.ruleForm);
+          let formData = this.qs.stringify(this.ruleForm,{arrayFormat: 'repeat'});
           console.log('formData：' + formData);
           this.axios.post(url, formData).then((response)=> {
             let responseBody = response.data;
@@ -134,6 +145,9 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
+  },
+  mounted() {
+    this.loadRoleList();
   }
 }
 </script>
