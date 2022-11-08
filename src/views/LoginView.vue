@@ -1,20 +1,20 @@
-<!--管理员登录-->
 <template>
-  <div style="background-color: white; width: 800px; margin: 100px auto; padding: 50px; border-radius: 10px">
-    <h1 style="text-align: center; margin: 0 0 30px 0">管理员登录</h1>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model="ruleForm.username"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <label slot="label">密&nbsp;&nbsp;&nbsp;&nbsp;码</label>
-        <el-input v-model="ruleForm.password"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
-      </el-form-item>
-    </el-form>
+  <div>
+    <div style="width: 600px; background: #fff; margin: 60px auto; padding: 20px 50px;">
+      <h1 style="text-align: center; margin: 30px auto;">管理员登录</h1>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="ruleForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="ruleForm.password"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
@@ -23,8 +23,8 @@ export default {
   data() {
     return {
       ruleForm: {
-        username: '',
-        password: ''
+        username: 'root',
+        password: '123456'
       },
       rules: {
         username: [
@@ -33,17 +33,33 @@ export default {
         ],
         password: [
           {required: true, message: '请输入密码', trigger: 'blur'},
-          {min: 6, max: 12, message: '长度在 6 到 12 个字符', trigger: 'blur'}
+          {min: 4, max: 15, message: '长度在 4 到 15 个字符', trigger: 'blur'}
         ]
       }
     };
   },
   methods: {
     submitForm(formName) {
-      // 检查表单是否通过验证
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          let url = 'http://localhost:9081/admins/login';
+          console.log('url = ' + url);
+          let formData = this.qs.stringify(this.ruleForm);
+          console.log('formData = ' + formData);
+          this.axios.post(url, formData).then((response) => {
+            let responseBody = response.data;
+            if (responseBody.state == 20000) {
+              this.$message({
+                message: '登录成功！',
+                type: 'success'
+              });
+              let jwt = responseBody.data;
+              console.log('登录成功，服务器端响应JWT：' + jwt);
+            } else {
+              console.log(responseBody.message);
+              this.$message.error(responseBody.message);
+            }
+          });
         } else {
           console.log('error submit!!');
           return false;
@@ -59,7 +75,6 @@ export default {
 
 <style>
 body {
-  background: #66B1FF;
+  background: #2c3e50;
 }
-
 </style>

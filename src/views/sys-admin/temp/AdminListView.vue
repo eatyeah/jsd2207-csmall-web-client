@@ -120,6 +120,7 @@ export default {
     // 加载管理员列表
     loadAdminList() {
       console.log('loadAdminList ...');
+      console.log('在localStorage中的JWT数据' + localStorage.getItem('jwt'));
       let url = 'http://localhost:9081/admins';
       console.log('url = ' + url);
       this.axios.get(url).then((response) => {
