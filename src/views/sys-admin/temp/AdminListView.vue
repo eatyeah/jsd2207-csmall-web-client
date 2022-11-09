@@ -113,7 +113,7 @@ export default {
       let url = 'http://localhost:9081/admins';
       console.log('url = ' + url);
       this.axios
-          .create({headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt')}})
+          .create({headers: {'Authorization': localStorage.getItem('jwt')}})
           .get(url).then((response) => {
         let responseBody = response.data;
         this.tableData = responseBody.data;
