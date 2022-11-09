@@ -13,7 +13,8 @@
       <el-table-column prop="nickname" label="昵称" width="100" align="center"></el-table-column>
       <el-table-column prop="phone" label="手机号码" width="120" align="center"></el-table-column>
       <el-table-column prop="email" label="电子邮箱" width="180" align="center"></el-table-column>
-      <el-table-column prop="description" label="简介" header-align="center" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="description" label="简介" header-align="center"
+                       :show-overflow-tooltip="true"></el-table-column>
       <el-table-column label="是否启用" width="80" align="center">
         <template slot-scope="scope">
           <el-switch
