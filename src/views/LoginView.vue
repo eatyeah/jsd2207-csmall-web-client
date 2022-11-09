@@ -55,6 +55,8 @@ export default {
               });
               let jwt = responseBody.data;
               console.log('登录成功，服务器端响应JWT：' + jwt);
+              localStorage.setItem('jwt', jwt);
+              console.log('已经将JWT保存到localStorage');
             } else {
               console.log(responseBody.message);
               this.$message.error(responseBody.message);
