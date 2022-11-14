@@ -1,9 +1,7 @@
 <template>
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size: 16px;">
-      <el-breadcrumb-item :to="{ path: '/sys-admin' }">
-        <i class="el-icon-s-promotion"></i> 后台管理
-      </el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">后台管理</el-breadcrumb-item>
       <el-breadcrumb-item>添加相册</el-breadcrumb-item>
     </el-breadcrumb>
 
@@ -24,20 +22,17 @@
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
-
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   data() {
     return {
       ruleForm: {
-        name: '',
-        description: '',
-        sort: ''
+        name: '测试相册001',
+        description: '测试相册简介001',
+        sort: '99'
       },
       rules: {
         name: [
@@ -46,33 +41,33 @@ export default {
         ],
         description: [
           {required: true, message: '请输入相册简介', trigger: 'blur'},
-          {min: 6, max: 12, message: '长度在 6 到 12 个字符', trigger: 'blur'}
+          {min: 4, max: 35, message: '长度在 4 到 35 个字符', trigger: 'blur'}
         ],
         sort: [
-          {required: true, message: '请输入相册排序序号', trigger: 'blur'},
-          {trigger: 'blur'}
+          {required: true, message: '请输入排序序号', trigger: 'blur'}
         ]
       }
     };
   },
   methods: {
     submitForm(formName) {
-      // 检查表单是否通过验证
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let url = 'http://localhost:9080/albums/add-new';
-          console.log('url: ' + url);
-          let formDate = this.qs.stringify(this.ruleForm);
-          this.axios.post(url, formDate).then((response) => {
+          console.log('url = ' + url);
+          let formData = this.qs.stringify(this.ruleForm);
+          console.log('formData = ' + formData);
+          this.axios
+              .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+              .post(url, formData).then((response) => {
             let responseBody = response.data;
-            console.log('responseBody= ');
+            console.log('responseBody = ');
             console.log(responseBody);
             if (responseBody.state == 20000) {
               this.$message({
-                message: responseBody.message,
+                message: '添加相册成功！',
                 type: 'success'
               });
-              //  清空表单
               this.resetForm(formName);
             } else {
               this.$message.error(responseBody.message);

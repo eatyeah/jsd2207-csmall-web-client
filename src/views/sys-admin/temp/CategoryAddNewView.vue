@@ -56,11 +56,11 @@ export default {
   data() {
     return {
       ruleForm: {
-        parentId: '',
-        name: '',
-        keywords: '',
-        sort: 0,
-        icon: '',
+        parentId: '0',
+        name: '测试类别001',
+        keywords: '测试关键词1,测试关键词2,测试关键词3',
+        sort: 99,
+        icon: 'http://www.baidu.com/logo.png',
         enable: 1,
         isDisplay: 1
       },

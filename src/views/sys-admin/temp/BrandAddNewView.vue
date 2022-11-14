@@ -50,13 +50,13 @@ export default {
   data() {
     return {
       ruleForm: {
-        name: '',
-        pinyin: '',
-        description: '',
-        logo: '',
+        name: '测试品牌001',
+        pinyin: 'ceshipinpai001',
+        description: '测试品牌的简介001',
+        logo: 'http://www.baidu.com/logo.png',
         enable: 1,
-        keywords: '',
-        sort: ''
+        keywords: '测试关键词1,测试关键词2,测试关键词3',
+        sort: '99'
       },
       rules: {
         name: [
@@ -85,12 +85,13 @@ export default {
           console.log('url = ' + url);
           let formData = this.qs.stringify(this.ruleForm);
           console.log('formData = ' + formData);
-
-          this.axios.post(url, formData).then((response) => {
+          this.axios
+              .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+              .post(url, formData).then((response) => {
             let responseBody = response.data;
             if (responseBody.state == 20000) {
               this.$message({
-                message: '添加品牌成功！',
+                message: '添加成功！',
                 type: 'success'
               });
               this.resetForm(formName);

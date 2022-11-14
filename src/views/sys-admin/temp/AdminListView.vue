@@ -12,9 +12,8 @@
       <el-table-column prop="username" label="用户名" width="120" align="center"></el-table-column>
       <el-table-column prop="nickname" label="昵称" width="100" align="center"></el-table-column>
       <el-table-column prop="phone" label="手机号码" width="120" align="center"></el-table-column>
-      <el-table-column prop="email" label="电子邮箱" width="180" align="center"></el-table-column>
-      <el-table-column prop="description" label="简介" header-align="center"
-                       :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="email" label="电子邮箱" width="180" align="center" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="description" label="简介" header-align="center" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column label="是否启用" width="80" align="center">
         <template slot-scope="scope">
           <el-switch
@@ -61,7 +60,9 @@ export default {
         url += '/disable';
       }
       console.log('url = ' + url);
-      this.axios.post(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .post(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state == 20000) {
           let message = '将管理员【' + admin.username + '】的启用状态改为【' + enableText[admin.enable] + '】成功！';
@@ -86,7 +87,9 @@ export default {
     handleDelete(admin) {
       let url = 'http://localhost:9081/admins/' + admin.id + '/delete';
       console.log('url = ' + url);
-      this.axios.post(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .post(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state != 20000) {
           this.$message.error(responseBody.message);
@@ -113,7 +116,7 @@ export default {
       let url = 'http://localhost:9081/admins';
       console.log('url = ' + url);
       this.axios
-          .create({headers: {'Authorization': localStorage.getItem('jwt')}})
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
           .get(url).then((response) => {
         let responseBody = response.data;
         this.tableData = responseBody.data;

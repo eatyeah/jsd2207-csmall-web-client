@@ -67,7 +67,9 @@ export default {
     loadAttributeTemplateList() {
       let url = 'http://localhost:9080/attribute-templates';
       console.log('url = ' + url);
-      this.axios.get(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .get(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state == 20000) {
           let attributeTemplateList = responseBody.data;
@@ -81,7 +83,9 @@ export default {
       let url = 'http://localhost:9080/attributes/list-by-template?templateId='
           + this.ruleForm.templateId;
       console.log('url = ' + url);
-      this.axios.get(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .get(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state == 20000) {
           this.tableData = responseBody.data;
@@ -112,7 +116,9 @@ export default {
     handleDelete(attribute) {
       let url = 'http://localhost:9080/attributes/' + attribute.id + '/delete';
       console.log('url = ' + url);
-      this.axios.post(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .post(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state != 20000) {
           this.$message.error(responseBody.message);

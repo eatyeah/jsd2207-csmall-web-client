@@ -20,7 +20,7 @@
           <el-button type="primary" icon="el-icon-edit" size="mini" circle
                      @click="handleEdit(scope.row)"></el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" circle
-                     @click="handleDelete(scope.row)"></el-button>
+                     @click="openDeleteConfirm(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -38,7 +38,9 @@ export default {
     loadAttributeTemplateList() {
       let url = 'http://localhost:9080/attribute-templates';
       console.log('url = ' + url);
-      this.axios.get(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .get(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state == 20000) {
           this.tableData = responseBody.data;
@@ -56,7 +58,7 @@ export default {
     },
     openDeleteConfirm(attributeTemplate) {
       let title = '提示';
-      let message = '此操作将永久删除【' + attributeTemplate.name + '】属性模板, 是否继续?';
+      let message = '此操作将永久删除【' + attributeTemplate.name + '】属性模板，是否继续？';
       this.$confirm(message, title, {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -69,7 +71,9 @@ export default {
     handleDelete(attributeTemplate) {
       let url = 'http://localhost:9080/attribute-templates/' + attributeTemplate.id + '/delete';
       console.log('url = ' + url);
-      this.axios.post(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .post(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state != 20000) {
           this.$message.error(responseBody.message);

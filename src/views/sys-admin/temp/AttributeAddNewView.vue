@@ -75,13 +75,13 @@ export default {
       attributeTemplateListOptions: [],
       ruleForm: {
         templateId: '',
-        name: '',
-        description: '',
+        name: '测试属性001',
+        description: '测试属性描述001',
         type: 0,
-        inputType: 0,
-        valueList: '',
-        unit: '',
-        sort: ''
+        inputType: 1,
+        valueList: '值1,值2,值3',
+        unit: '单位',
+        sort: 99
       },
       rules: {
         templateId: [
@@ -108,6 +108,7 @@ export default {
         if (responseBody.state == 20000) {
           let attributeTemplateList = responseBody.data;
           this.attributeTemplateListOptions = attributeTemplateList;
+          this.ruleForm.templateId = this.attributeTemplateListOptions[0].id;
         } else {
           this.$message.error(responseBody.message);
         }

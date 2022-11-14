@@ -35,10 +35,10 @@ export default {
   data() {
     return {
       ruleForm: {
-        name: '',
-        pinyin: '',
-        keywords: '',
-        sort: ''
+        name: '测试属性模板001',
+        pinyin: 'ceshishuxingmuban001',
+        keywords: '测试关键词1,测试关键词2,测试关键词3',
+        sort: 99
       },
       rules: {
         name: [

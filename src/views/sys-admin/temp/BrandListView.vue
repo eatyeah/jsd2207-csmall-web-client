@@ -16,18 +16,6 @@
       <el-table-column prop="pinyin" label="拼音" width="180" align="center"></el-table-column>
       <el-table-column prop="description" label="简介" align="center"></el-table-column>
       <el-table-column prop="sort" label="排序序号" width="80" align="center"></el-table-column>
-      <el-table-column label="是否启用" align="center" width="80">
-        <template slot-scope="scope">
-          <el-switch
-              @change="changeEnable(scope.row)"
-              v-model="scope.row.enable"
-              :active-value="1"
-              :inactive-value="0"
-              active-color="#13ce66"
-              inactive-color="#ccc">
-          </el-switch>
-        </template>
-      </el-table-column>
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" size="mini" circle
@@ -48,36 +36,12 @@ export default {
     }
   },
   methods: {
-    // 是否启用品牌
-    changeEnable(brand) {
-      let enableText = ['禁用', '启用'];
-      let url = 'http://localhost:9080/brands/' + brand.id;
-      if (brand.enable == 1) {
-        url += '/enable';
-      } else {
-        url += '/disable';
-      }
-      console.log('url = ' + url);
-      this.axios.post(url).then((response) => {
-        let responseBody = response.data;
-        if (responseBody.state == 20000) {
-          let message = '将品牌【' + brand.username + '】的启用状态改为【' + enableText[brand.enable] + '】成功！';
-          this.$message({
-            message: message,
-            type: 'success'
-          });
-        } else {
-          this.$message.error(responseBody.message);
-        }
-        if (responseBody.state == 40400) {
-          this.loadBrandList();
-        }
-      });
-    },
     loadBrandList() {
       let url = 'http://localhost:9080/brands';
       console.log('url = ' + url);
-      this.axios.get(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .get(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state == 20000) {
           this.tableData = responseBody.data;
@@ -108,7 +72,9 @@ export default {
     handleDelete(brand) {
       let url = 'http://localhost:9080/brands/' + brand.id + '/delete';
       console.log('url = ' + url);
-      this.axios.post(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .post(url).then((response) => {
         let responseBody = response.data;
         console.log(responseBody);
         if (responseBody.state != 20000) {

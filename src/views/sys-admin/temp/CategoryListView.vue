@@ -38,12 +38,6 @@
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="子级类别" width="100" align="center">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="showSubCategories(scope.row)"
-                     :disabled="scope.row.isParent == 0">查看</el-button>
-        </template>
-      </el-table-column>
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" size="mini" circle
@@ -54,9 +48,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <div style="margin: 10px 0; float: right;" v-if="parentCategoryId != 0">
-      <el-button size="mini" @click="backToRootList()">返回</el-button>
-    </div>
   </div>
 </template>
 
@@ -64,21 +55,12 @@
 export default {
   data() {
     return {
-      parentCategoryId: 0,
       enableText: ['禁用', '启用'],
       displayText: ['不显示在导航栏', '显示在导航栏'],
       tableData: []
     }
   },
   methods: {
-    backToRootList() {
-      this.parentCategoryId = 0;
-      this.loadCategoryList();
-    },
-    showSubCategories(category) {
-      this.parentCategoryId = category.id;
-      this.loadCategoryList();
-    },
     handleChangeEnable(category) {
       let url = 'http://localhost:9080/categories/' + category.id;
       if (category.enable == 1) {
@@ -87,7 +69,9 @@ export default {
         url += '/disable';
       }
       console.log('url = ' + url);
-      this.axios.post(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .post(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state == 20000) {
           this.$message({
@@ -108,7 +92,9 @@ export default {
         url += '/hidden';
       }
       console.log('url = ' + url);
-      this.axios.post(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .post(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state == 20000) {
           this.$message({
@@ -130,7 +116,7 @@ export default {
     },
     openDeleteConfirm(category) {
       let title = '提示';
-      let message = '此操作将永久删除【' + category.name + '】类别, 是否继续?';
+      let message = '此操作将永久删除【' + category.name + '】类别，是否继续？';
       this.$confirm(message, title, {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -143,7 +129,9 @@ export default {
     handleDelete(category) {
       let url = 'http://localhost:9080/categories/' + category.id + '/delete';
       console.log('url = ' + url);
-      this.axios.post(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .post(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state != 20000) {
           this.$message.error(responseBody.message);
@@ -152,10 +140,11 @@ export default {
       });
     },
     loadCategoryList() {
-      let url = 'http://localhost:9080/categories/list-by-parent?parentId='
-          + this.parentCategoryId;
+      let url = 'http://localhost:9080/categories';
       console.log('url = ' + url);
-      this.axios.get(url).then((response) => {
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .get(url).then((response) => {
         let responseBody = response.data;
         if (responseBody.state == 20000) {
           this.tableData = responseBody.data;
