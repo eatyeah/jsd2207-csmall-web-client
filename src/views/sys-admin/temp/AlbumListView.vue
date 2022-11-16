@@ -37,7 +37,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="submitEdit()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -49,6 +49,7 @@ export default {
     return {
       tableData: [],
       ruleForm: {
+        id: '',
         name: '',
         description: '',
         sort: ''
@@ -58,6 +59,30 @@ export default {
     }
   },
   methods: {
+    submitEdit() {
+      let url = 'http://localhost:9080/albums/' + this.ruleForm.id + '/update';
+      console.log(url);
+      let formData = this.qs.stringify(this.ruleForm);
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+          .post(url, formData).then((response) => {
+        let responseBody = response.data;
+        if (responseBody.state == 20000) {
+          this.$message({
+            message: '修改相册成功！',
+            type: 'success'
+          });
+          this.dialogFormVisible = false;
+          this.loadAlbumList();
+        } else if (responseBody.state == 40900) {
+          this.$message.error(responseBody.message);
+        } else {
+          this.$message.error(responseBody.message);
+          this.dialogFormVisible = false;
+          this.loadAlbumList();
+        }
+      });
+    },
     handleEdit(album) {
       let message = '您正在尝试编辑【' + album.id + '-' + album.name + '】的相册详情，抱歉，该功能尚未实现……';
       console.log(message);
