@@ -59,6 +59,9 @@
     <el-button style="margin-top: 10px; float: right;"
                v-if="currentDepth != 1" @click="goBack()">返回
     </el-button>
+
+
+
   </div>
 </template>
 
@@ -134,11 +137,9 @@ export default {
       });
     },
     handleEdit(category) {
-      let title = '提示';
       let message = '您正在尝试编辑【' + category.id + '-' + category.name + '】的类别详情，抱歉，此功能尚未实现……';
-      this.$alert(message, title, {
-        confirmButtonText: '确定'
-      });
+      console.log(message);
+      this.dialogFormVisible = true;
     },
     openDeleteConfirm(category) {
       let title = '提示';
