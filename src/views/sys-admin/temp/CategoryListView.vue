@@ -5,6 +5,7 @@
         <i class="el-icon-s-promotion"></i> 后台管理
       </el-breadcrumb-item>
       <el-breadcrumb-item>类别列表</el-breadcrumb-item>
+      <el-breadcrumb-item v-for="item in history"><span v-text="item.name"></span></el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-divider></el-divider>
@@ -41,7 +42,8 @@
       <el-table-column label="查看子级" width="100" align="center">
         <template slot-scope="scope">
           <el-button size="mini" :disabled="scope.row.isParent == 0"
-                     @click="showSubCategories(scope.row)">查看子级</el-button>
+                     @click="showSubCategories(scope.row)">查看子级
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="100" align="center">
@@ -54,6 +56,10 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-button style="margin-top: 10px; float: right;"
+               v-if="tableData[0].depth != 1"
+               @click="showParentCategories()">返回
+    </el-button>
   </div>
 </template>
 
@@ -61,6 +67,9 @@
 export default {
   data() {
     return {
+      currentL1Category: null,
+      currentL2Category: null,
+      currentDepth: 1,
       currentParentId: 0,
       enableText: ['禁用', '启用'],
       displayText: ['不显示在导航栏', '显示在导航栏'],
@@ -68,7 +77,27 @@ export default {
     }
   },
   methods: {
+    showParentCategories() {
+      let parentCategory;
+      if (this.currentDepth == 3) {
+        parentCategory = this.currentL2Category;
+        this.currentDepth = 2;
+      } else if (this.currentDepth == 2) {
+        parentCategory = this.currentL1Category;
+        this.currentDepth = 1;
+      }
+      this.currentParentId = parentCategory.parentId;
+      this.loadCategoryList();
+    },
     showSubCategories(category) {
+      if (category.depth == 1) {
+        this.currentL1Category = category;
+        this.currentDepth = 2;
+      }
+      if (category.depth == 2) {
+        this.currentL2Category = category;
+        this.currentDepth = 3;
+      }
       this.currentParentId = category.id;
       this.loadCategoryList();
     },
@@ -150,7 +179,7 @@ export default {
         this.loadCategoryList();
       });
     },
-    loadCategoryList( ) {
+    loadCategoryList() {
       let url = 'http://localhost:9080/categories/list-by-parent?parentId=' + this.currentParentId;
       console.log('url = ' + url);
       this.axios
