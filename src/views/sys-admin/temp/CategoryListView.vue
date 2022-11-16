@@ -38,6 +38,12 @@
           </el-switch>
         </template>
       </el-table-column>
+      <el-table-column label="查看子级" width="100" align="center">
+        <template slot-scope="scope">
+          <el-button size="mini" :disabled="scope.row.isParent == 0"
+                     @click="showSubCategories(scope.row)">查看子级</el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" size="mini" circle
@@ -55,12 +61,17 @@
 export default {
   data() {
     return {
+      currentParentId: 0,
       enableText: ['禁用', '启用'],
       displayText: ['不显示在导航栏', '显示在导航栏'],
       tableData: []
     }
   },
   methods: {
+    showSubCategories(category) {
+      this.currentParentId = category.id;
+      this.loadCategoryList();
+    },
     handleChangeEnable(category) {
       let url = 'http://localhost:9080/categories/' + category.id;
       if (category.enable == 1) {
@@ -139,8 +150,8 @@ export default {
         this.loadCategoryList();
       });
     },
-    loadCategoryList() {
-      let url = 'http://localhost:9080/categories';
+    loadCategoryList( ) {
+      let url = 'http://localhost:9080/categories/list-by-parent?parentId=' + this.currentParentId;
       console.log('url = ' + url);
       this.axios
           .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
