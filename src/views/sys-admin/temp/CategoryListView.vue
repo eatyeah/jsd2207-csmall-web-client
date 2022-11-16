@@ -57,8 +57,7 @@
       </el-table-column>
     </el-table>
     <el-button style="margin-top: 10px; float: right;"
-               v-if="tableData[0].depth != 1"
-               @click="showParentCategories()">返回
+               v-if="currentDepth != 1" @click="goBack()">返回
     </el-button>
   </div>
 </template>
@@ -67,8 +66,7 @@
 export default {
   data() {
     return {
-      currentL1Category: null,
-      currentL2Category: null,
+      history: [],
       currentDepth: 1,
       currentParentId: 0,
       enableText: ['禁用', '启用'],
@@ -77,27 +75,15 @@ export default {
     }
   },
   methods: {
-    showParentCategories() {
-      let parentCategory;
-      if (this.currentDepth == 3) {
-        parentCategory = this.currentL2Category;
-        this.currentDepth = 2;
-      } else if (this.currentDepth == 2) {
-        parentCategory = this.currentL1Category;
-        this.currentDepth = 1;
-      }
+    goBack() {
+      let parentCategory = this.history[--this.currentDepth - 1];
       this.currentParentId = parentCategory.parentId;
+      this.history.pop();
       this.loadCategoryList();
     },
     showSubCategories(category) {
-      if (category.depth == 1) {
-        this.currentL1Category = category;
-        this.currentDepth = 2;
-      }
-      if (category.depth == 2) {
-        this.currentL2Category = category;
-        this.currentDepth = 3;
-      }
+      this.history[this.currentDepth - 1] = category;
+      this.currentDepth++;
       this.currentParentId = category.id;
       this.loadCategoryList();
     },
