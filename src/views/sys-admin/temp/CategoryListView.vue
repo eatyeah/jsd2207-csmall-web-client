@@ -77,8 +77,8 @@ export default {
   methods: {
     goBack() {
       let parentCategory = this.history[--this.currentDepth - 1];
-      this.currentParentId = parentCategory.parentId;
       this.history.pop();
+      this.currentParentId = parentCategory.parentId;
       this.loadCategoryList();
     },
     showSubCategories(category) {
